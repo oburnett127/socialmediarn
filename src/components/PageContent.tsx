@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { View } from 'react-native';
 
 interface PageContentProps {
   title: string;
@@ -7,10 +8,10 @@ interface PageContentProps {
 
 function PageContent({ title, children }: PageContentProps) {
   return (
-    <div>
+    <View>
       <h1>{title}</h1>
       {children}
-    </div>
+    </View>
   );
 }
 

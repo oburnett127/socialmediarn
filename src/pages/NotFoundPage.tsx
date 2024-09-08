@@ -1,8 +1,9 @@
 import React from 'react';
+import { Text } from 'react-native';
 
 function NotFoundPage() {
   return (
-    <p style={{textAlign:'center'}}>The requested page was not found</p>
+    <Text style={{textAlign:'center'}}>The requested page was not found</p>
   );
 }
 

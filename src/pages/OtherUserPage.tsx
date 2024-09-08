@@ -1,15 +1,20 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import PostsList from '../components/PostsList';
 import NewPost from '../components/NewPost';
 import { UserContext } from '../components/UserContext';
 
+type DrawerParamList = {
+  OtherUser: { id: string }; // Define what parameters the route expects
+};
+
 function OtherUserPage() {
-  const { id: searchedUserId } = useParams<{ id: string }>();
+  const route = useRoute<RouteProp<DrawerParamList, 'OtherUser'>>();
+  const { id: searchedUserId } = route.params;
   const userContext = useContext(UserContext);
   const [isFriend, setIsFriend] = useState<boolean>(false);
-  const [isBlocked, setIsBlocked] = useState<boolean>(false);
-  const { user } = userContext || {}; // Use destructuring with a default object to prevent issues if userContext is null
+  //const [isBlocked, setIsBlocked] = useState<boolean>(false);
+  const { user } = userContext || {};
   const jwtToken = localStorage.getItem('jwtToken');
 
   //console.log('searched user id: ', searchedUserId);
@@ -40,32 +45,32 @@ function OtherUserPage() {
       }
     };
 
-    const getBlockedStatus = async () => {
-      try {
-        if (!user.id || !searchedUserId) return;
-        const requestData = {
-          blockerUserId: user.id,
-          blockedUserId: searchedUserId
-        };
+    // const getBlockedStatus = async () => {
+    //   try {
+    //     if (!user.id || !searchedUserId) return;
+    //     const requestData = {
+    //       blockerUserId: user.id,
+    //       blockedUserId: searchedUserId
+    //     };
 
-        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/block/getblockedstatus`, {
-          method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${jwtToken}`,
-            },
-            body: JSON.stringify(requestData),
-        });
-        const result = await response.json();
-        setIsBlocked(result);
-        console.log(result);
-      } catch (error) {
-        console.error('Error getting blocked status:', error);
-      }
-    };
+    //     const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/block/getblockedstatus`, {
+    //       method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             Authorization: `Bearer ${jwtToken}`,
+    //         },
+    //         body: JSON.stringify(requestData),
+    //     });
+    //     const result = await response.json();
+    //     setIsBlocked(result);
+    //     console.log(result);
+    //   } catch (error) {
+    //     console.error('Error getting blocked status:', error);
+    //   }
+    // };
     
     getFriendStatus();
-    getBlockedStatus();
+    //getBlockedStatus();
   }, [user?.id, searchedUserId, jwtToken]);
 
   const handleRequestFriend = () => {
@@ -118,55 +123,55 @@ function OtherUserPage() {
     removeFriend();
   }
 
-  const handleBlockUser = () => {
-    const blockUser = async () => {
-      try {
-        if (!user?.id || !searchedUserId) return;
-        const requestData = {
-          blockerUserId: user.id,
-          blockedUserId: searchedUserId
-        };
+  // const handleBlockUser = () => {
+  //   const blockUser = async () => {
+  //     try {
+  //       if (!user?.id || !searchedUserId) return;
+  //       const requestData = {
+  //         blockerUserId: user.id,
+  //         blockedUserId: searchedUserId
+  //       };
 
-        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/block/create`, {
-          method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${jwtToken}`,
-            },
-            body: JSON.stringify(requestData),
-        });
-      } catch (error) {
-        console.error('Error blocking user:', error);
-      }
-    };
+  //       const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/block/create`, {
+  //         method: 'POST',
+  //           headers: {
+  //               'Content-Type': 'application/json',
+  //               Authorization: `Bearer ${jwtToken}`,
+  //           },
+  //           body: JSON.stringify(requestData),
+  //       });
+  //     } catch (error) {
+  //       console.error('Error blocking user:', error);
+  //     }
+  //   };
       
-    blockUser();
-  }
+  //   blockUser();
+  // }
 
-  const handleUnblockUser = () => {
-    const unblockUser = async () => {
-      try {
-        if (!user?.id || !searchedUserId) return;
-        const requestData = {
-          blockerUserId: user.id,
-          blockedUserId: searchedUserId
-        };
+  // const handleUnblockUser = () => {
+  //   const unblockUser = async () => {
+  //     try {
+  //       if (!user?.id || !searchedUserId) return;
+  //       const requestData = {
+  //         blockerUserId: user.id,
+  //         blockedUserId: searchedUserId
+  //       };
 
-        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/block/delete`, {
-          method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${jwtToken}`,
-            },
-            body: JSON.stringify(requestData),
-        });
-      } catch (error) {
-        console.error('Error blocking user:', error);
-      }
-    };
+  //       const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/block/delete`, {
+  //         method: 'POST',
+  //           headers: {
+  //               'Content-Type': 'application/json',
+  //               Authorization: `Bearer ${jwtToken}`,
+  //           },
+  //           body: JSON.stringify(requestData),
+  //       });
+  //     } catch (error) {
+  //       console.error('Error blocking user:', error);
+  //     }
+  //   };
       
-    unblockUser();
-  }
+  //   unblockUser();
+  // }
 
   if (!userContext || !userContext.user) return null;
 

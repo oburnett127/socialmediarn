@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { UserContext } from '../components/UserContext';
+import { Text } from 'react-native';
 
 function LogoutPage() {
   const userContext = useContext(UserContext);
@@ -10,7 +11,7 @@ function LogoutPage() {
   setIsLoggedIn(false); 
   
   return (
-    <p style={{ textAlign: 'center'}}>You have successfully logged out</p>
+    <Text style={{ textAlign: 'center'}}>You have successfully logged out</p>
   )
 }
 

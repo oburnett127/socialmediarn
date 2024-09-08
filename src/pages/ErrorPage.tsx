@@ -1,6 +1,6 @@
 import React from 'react';
-import { useRouteError } from 'react-router-dom';
-import MainNavigation from '../components/MainNavigation';
+import { View, Text, StyleSheet } from 'react-native';
+import { useRoute } from '@react-navigation/native';
 import PageContent from '../components/PageContent';
 
 interface IError {
@@ -11,28 +11,44 @@ interface IError {
 }
 
 function ErrorPage() {
-  const error = useRouteError() as IError;
+  const route = useRoute();
+  const error = route.params?.error as IError;
 
   let title = 'An error occurred!';
   let message = 'Something went wrong!';
 
-  if (error.status === 500) {
-    message = error.data?.message || 'Something went wrong!';
+  if (error?.status === 500) {
+    message = error?.data?.message || 'Something went wrong!';
   }
 
-  if (error.status === 404) {
+  if (error?.status === 404) {
     title = 'Not found!';
     message = 'Could not find resource or page.';
   }
 
   return (
-    <>
-      <MainNavigation />
+    <View style={styles.container}>
       <PageContent title={title}>
-        <p>{message}</p>
+        <Text style={styles.message}>{message}</Text>
       </PageContent>
-    </>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: '#fff',
+  },
+  message: {
+    fontSize: 16,
+    color: '#333',
+    textAlign: 'center',
+    marginTop: 10,
+  },
+});
 
 export default ErrorPage;
