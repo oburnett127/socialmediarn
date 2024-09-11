@@ -5,7 +5,7 @@ import NewPost from '../components/NewPost';
 import { UserContext } from '../components/UserContext';
 
 type DrawerParamList = {
-  OtherUser: { id: string }; // Define what parameters the route expects
+  OtherUser: { id: string };
 };
 
 function OtherUserPage() {
