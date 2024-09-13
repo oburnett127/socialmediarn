@@ -1,22 +1,30 @@
-import { UserContext } from './UserContext';
 import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, FlatList } from 'react-native';
+import { UserContext } from './UserContext';
 
-function Notifications() {
-    const [messageSet, setMessageSet] = useState(new Set());
-    const [messages, setMessages] = useState([]);
-    const userContext = useContext(UserContext);
+interface User {
+    id: string;
+}
+
+interface UserContextType {
+    user: User | null;
+}
+
+const Notifications: React.FC = () => {
+    const [messageSet, setMessageSet] = useState<Set<string>>(new Set());
+    const [messages, setMessages] = useState<string[]>([]);
+    const userContext = useContext<UserContextType | null>(UserContext);
 
     useEffect(() => {
-        
         if (!userContext || !userContext.user) return;
-    
+
         const { user } = userContext;
         console.log("WebSocket is being set up.");
-    
+
         const socket = new WebSocket('ws://localhost:15674/ws');
-    
-        const handleMessage = (event) => {
-            const rawData = event.data;
+
+        const handleMessage = (event: WebSocketMessageEvent) => {
+            const rawData = event.data as string;
             const contentLengthIndex = rawData.lastIndexOf("content-length:");
 
             if (contentLengthIndex !== -1) {
@@ -26,9 +34,9 @@ function Notifications() {
                 
                 const messageBodyStartIndex = rawData.length - messageBodyLength;
                 const messageBody = rawData.substring(messageBodyStartIndex);
-                
+
                 console.log('Received a message from the server:', messageBody);
-                
+
                 if (messageSet.has(messageBody)) {
                     console.log("Ignoring duplicate message", messageBody);
                     return;
@@ -42,8 +50,8 @@ function Notifications() {
         };
 
         socket.addEventListener('message', handleMessage);
-        
-        const handleOpen = (event) => {
+
+        const handleOpen = () => {
             const login = 'guest';
             const passcode = 'guest';
             socket.send(`CONNECT\nlogin:${login}\npasscode:${passcode}\n\n\0`);
@@ -51,7 +59,7 @@ function Notifications() {
         };
 
         socket.addEventListener('open', handleOpen);
-        
+
         return () => {
             socket.removeEventListener('message', handleMessage);
             socket.removeEventListener('open', handleOpen);
@@ -59,26 +67,27 @@ function Notifications() {
         };
     }, [userContext, messageSet]);
 
-
     if (!userContext || !userContext.user) {
         return (
-            <div>
-                <h1>Notifications</h1>
-                <p>Loading...</p>
-            </div>
+            <View>
+                <Text>Notifications</Text>
+                <Text>Loading...</Text>
+            </View>
         );
     }
 
     return (
-        <div>
-            <h1>Notifications</h1>
-            <ul>
-                {messages.map((message, index) => (
-                    <li key={index}>{message}</li>
-                ))}
-            </ul>
-        </div>
+        <View>
+            <Text>Notifications</Text>
+            <FlatList
+                data={messages}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                    <Text>{item}</Text>
+                )}
+            />
+        </View>
     );
-}
+};
 
 export default Notifications;

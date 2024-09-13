@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Post from './Post';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View } from 'react-native';
 
 interface PostInfo {
   postId: string;
@@ -14,7 +16,7 @@ interface PostsListProps {
 function PostsList({ id }: PostsListProps) {
   const [posts, setPosts] = useState<PostInfo[]>([]);
 
-  const jwtToken = localStorage.getItem('jwtToken');
+  const jwtToken = AsyncStorage.getItem('jwtToken');
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -38,11 +40,11 @@ function PostsList({ id }: PostsListProps) {
 
   return (
     Array.isArray(posts) && posts.length > 0 ? (
-      <div>
+      <View>
           {posts.map((post) => (
               <Post postInfo={post} />
           ))}
-      </div>
+      </View>
     ) : null
   );
 }

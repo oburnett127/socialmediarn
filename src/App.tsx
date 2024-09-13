@@ -19,6 +19,7 @@ export type RootDrawerParamList = {
     OtherUserPage: { id: string };
     Auth: undefined;
     Logout: undefined;
+    SearchUser: undefined;
 };
 
 const Drawer = createDrawerNavigator<RootDrawerParamList>();

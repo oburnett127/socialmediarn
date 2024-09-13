@@ -3,12 +3,16 @@ import { View, Text, TextInput, Button, FlatList, TouchableOpacity, StyleSheet }
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { RootDrawerParamList } from '../App';
 
 interface IUser {
   id: string;
   firstName: string;
   lastName: string;
 }
+
+type SearchUserNavigationProp = DrawerNavigationProp<RootDrawerParamList, 'SearchUser'>;
 
 function SearchUser() {
   const navigation = useNavigation<SearchUserNavigationProp>();
