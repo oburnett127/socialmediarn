@@ -2,25 +2,27 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, FlatList } from 'react-native';
 import { UserContext } from './UserContext';
 
-interface User {
-    id: string;
-}
-
-interface UserContextType {
-    user: User | null;
-}
-
 const Notifications: React.FC = () => {
     const [messageSet, setMessageSet] = useState<Set<string>>(new Set());
     const [messages, setMessages] = useState<string[]>([]);
-    const userContext = useContext<UserContextType | null>(UserContext);
+    
+    // Use the context and handle undefined state
+    const userContext = useContext(UserContext);
+
+    if (!userContext) {
+        return (
+            <View>
+                <Text>No user context available</Text>
+            </View>
+        );
+    }
+
+    const { user } = userContext;
 
     useEffect(() => {
-        if (!userContext || !userContext.user) return;
+        if (!user) return;
 
-        const { user } = userContext;
         console.log("WebSocket is being set up.");
-
         const socket = new WebSocket('ws://localhost:15674/ws');
 
         const handleMessage = (event: WebSocketMessageEvent) => {
@@ -31,14 +33,11 @@ const Notifications: React.FC = () => {
                 const startIndex = rawData.indexOf(" ", contentLengthIndex);
                 const lengthString = rawData.substring(contentLengthIndex + "content-length:".length, startIndex).trim();
                 const messageBodyLength = parseInt(lengthString, 10) + 2;
-                
+
                 const messageBodyStartIndex = rawData.length - messageBodyLength;
                 const messageBody = rawData.substring(messageBodyStartIndex);
 
-                console.log('Received a message from the server:', messageBody);
-
                 if (messageSet.has(messageBody)) {
-                    console.log("Ignoring duplicate message", messageBody);
                     return;
                 }
 
@@ -65,9 +64,9 @@ const Notifications: React.FC = () => {
             socket.removeEventListener('open', handleOpen);
             socket.close();
         };
-    }, [userContext, messageSet]);
+    }, [user, messageSet]);
 
-    if (!userContext || !userContext.user) {
+    if (!user) {
         return (
             <View>
                 <Text>Notifications</Text>

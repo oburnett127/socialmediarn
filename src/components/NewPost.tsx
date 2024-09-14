@@ -1,16 +1,18 @@
 import React, { useContext } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import axios from 'axios';
 import { UserContext } from './UserContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Button, View, Text, TextInput } from 'react-native';
 
 interface IFormInput {
   postText: string;
 }
 
 function NewPost({ profUID }: { profUID: string }) {
-  const { register, handleSubmit, formState: { errors } } = useForm<IFormInput>();
+  const { control, register, handleSubmit, formState: { errors } } = useForm<IFormInput>();
   const userContext = useContext(UserContext);
-  const jwtToken = localStorage.getItem('jwtToken');
+  const jwtToken = AsyncStorage.getItem('jwtToken');
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     if (!userContext || !userContext.user) {
@@ -38,11 +40,33 @@ function NewPost({ profUID }: { profUID: string }) {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <textarea {...register("postText", { required: true })} placeholder="Write a new post..." />
-      <button type="submit">Submit</button>
-    </form>
+    <View style={{ padding: 16 }}>
+      <Controller
+        name="postText"
+        control={control}
+        rules={{ required: true }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            style={{
+              height: 100,
+              borderColor: 'gray',
+              borderWidth: 1,
+              marginBottom: 12,
+              padding: 8,
+            }}
+            multiline
+            placeholder="Write a new post..."
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+          />
+        )}
+      />
+      {errors.postText && <Text style={{ color: 'red' }}>This field is required.</Text>}
+
+      <Button title="Submit" onPress={handleSubmit(onSubmit)} />
+    </View>
   );
-}
+};
 
 export default NewPost;

@@ -16,10 +16,11 @@ export type RootDrawerParamList = {
     Home: undefined;
     HomeTabs: undefined;
     CurrentUser: undefined;
-    OtherUserPage: { id: string };
+    OtherUserPage: { id: number };
     Auth: undefined;
     Logout: undefined;
     SearchUser: undefined;
+    FriendsList: undefined;
 };
 
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
