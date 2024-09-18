@@ -4,10 +4,10 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { RootDrawerParamList } from '../App';
+import { RootDrawerParamList } from '../../App';
 
 interface IUser {
-  id: string;
+  id: number;
   firstName: string;
   lastName: string;
 }
@@ -90,7 +90,7 @@ function SearchUser() {
       {data && (
         <FlatList
           data={data}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={renderItem}
         />
       )}

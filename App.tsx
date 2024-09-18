@@ -2,15 +2,16 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { UserProvider } from './components/UserContext';
-import HomePage from './pages/HomePage';
-import FriendsPage from './pages/FriendsPage';
-import RequestsPage from './pages/RequestsPage';
-import NotificationsPage from './pages/NotificationsPage';
-import CurrentUserPage from './pages/CurrentUserPage';
-import OtherUserPage from './pages/OtherUserPage';
-import AuthenticationPage from './pages/AuthenticationPage';
-import LogoutPage from './pages/LogoutPage';
+import { registerRootComponent } from 'expo';
+import { UserProvider } from './src/components/UserContext';
+import HomePage from './src/pages/HomePage';
+import FriendsPage from './src/pages/FriendsPage';
+import RequestsPage from './src/pages/RequestsPage';
+import NotificationsPage from './src/pages/NotificationsPage';
+import CurrentUserPage from './src/pages/CurrentUserPage';
+import OtherUserPage from './src/pages/OtherUserPage';
+import AuthenticationPage from './src/pages/AuthenticationPage';
+import LogoutPage from './src/pages/LogoutPage';
 
 export type RootDrawerParamList = {
     Home: undefined;
@@ -49,7 +50,7 @@ function AppDrawer() {
     );
 }
 
-export default function App() {
+function App() {
     return (
         <UserProvider>
             <NavigationContainer>
@@ -58,3 +59,5 @@ export default function App() {
         </UserProvider>
     );
 }
+
+export default registerRootComponent(App);

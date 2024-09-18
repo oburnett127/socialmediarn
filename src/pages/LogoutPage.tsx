@@ -11,7 +11,7 @@ function LogoutPage() {
   setIsLoggedIn(false); 
   
   return (
-    <Text style={{ textAlign: 'center'}}>You have successfully logged out</p>
+    <Text style={{ textAlign: 'center'}}>You have successfully logged out</Text>
   )
 }
 

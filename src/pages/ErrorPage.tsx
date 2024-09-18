@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, RouteProp } from '@react-navigation/native';
 import PageContent from '../components/PageContent';
 
 interface IError {
@@ -10,15 +10,19 @@ interface IError {
   };
 }
 
+type ErrorPageRouteParams = {
+  error: IError;
+};
+
 function ErrorPage() {
-  const route = useRoute();
-  const error = route.params?.error as IError;
+  const route = useRoute<RouteProp<{ ErrorPage: ErrorPageRouteParams}, 'ErrorPage'>>();
+  const error = route.params?.error;
 
   let title = 'An error occurred!';
   let message = 'Something went wrong!';
 
   if (error?.status === 500) {
-    message = error?.data?.message || 'Something went wrong!';
+    message = error.data?.message || 'Something went wrong!';
   }
 
   if (error?.status === 404) {
@@ -28,9 +32,8 @@ function ErrorPage() {
 
   return (
     <View style={styles.container}>
-      <PageContent title={title}>
-        <Text style={styles.message}>{message}</Text>
-      </PageContent>
+      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.message}>{message}</Text>
     </View>
   );
 }
@@ -40,14 +43,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#fff',
+    padding: 16,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
   message: {
     fontSize: 16,
-    color: '#333',
     textAlign: 'center',
-    marginTop: 10,
   },
 });
 

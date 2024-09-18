@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import axios from 'axios';
 import { UserContext } from './UserContext';
-import { RootDrawerParamList } from '../App';
+import { RootDrawerParamList } from '../../App';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
