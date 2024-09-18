@@ -23,6 +23,13 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "packagerOpts": {
+      "dev": true,
+      "minify": false,
+      "urlType": "http",
+      "host": "192.168.0.152",
+      "port": 19005
     }
   }
 }
