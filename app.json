@@ -19,7 +19,13 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "buildProperties": {
+        "android": {
+          "cleartextTrafficPermitted": true
+        }
+      },
+      "package": "com.oburnett127.socialmediarn"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -30,6 +36,21 @@
       "urlType": "http",
       "host": "192.168.0.152",
       "port": 19005
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "cleartextTrafficPermitted": true
+          }
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "45ca9ca9-1232-4bbc-92ca-c63377888a11"
+      }
     }
   }
 }
