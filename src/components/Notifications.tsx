@@ -12,7 +12,7 @@ const Notifications: React.FC = () => {
     if (!userContext) {
         return (
             <View>
-                <Text>No user context available</Text>
+                <Text>No user context available. If not logged in please log in.</Text>
             </View>
         );
     }

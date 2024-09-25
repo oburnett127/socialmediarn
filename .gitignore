@@ -33,3 +33,96 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# Node.js dependency directory
+node_modules/
+
+# React Native packager output
+ios/build/
+android/app/build/
+android/.gradle/
+android/.idea/
+android/.gradle/
+android/.cxx/
+android/captures/
+
+# macOS specific files
+*.DS_Store
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Metro Bundler
+.expo/
+.expo-shared/
+.expo/
+
+# Gradle files (Android specific)
+android/.gradle
+android/local.properties
+android/.idea
+android/*/build/
+android/*/src/main/assets/debug
+android/*/src/main/assets/release
+
+# Android/Java specific files
+*.log
+*.lock
+*.key
+*.keystore
+
+# IntelliJ and Android Studio specific files
+.idea/
+*.iml
+.gradle/
+local.properties
+.DS_Store
+*.swp
+
+# Android generated build files
+android/app/build/
+android/build/
+android/.gradle/
+android/.idea/
+
+# OSX Finder files
+.DS_Store
+
+# Packaging files
+*.jar
+*.war
+*.ear
+
+# Unit test logs
+coverage/
+
+# Fastlane build files
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output/
+
+# IDE files (VSCode, JetBrains, etc.)
+.vscode/
+*.sublime-workspace
+*.sublime-project
+*.code-workspace
+
+# Build directories
+build/
+dist/
+
+# Watchman files
+.watchmanconfig
+watchman/
+
+# Temporary files created during development
+temp/
+tmp/
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini

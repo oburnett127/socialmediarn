@@ -25,7 +25,12 @@ const FriendsList: React.FC = () => {
       try {
         const jwtToken = await AsyncStorage.getItem('jwtToken');
         if (!userContext || !userContext.user) {
-          throw new Error('User context not available');
+          return (
+            <View>
+                <Text>No user context available. If not logged in please log in.</Text>
+            </View>
+        );
+          //throw new Error('User context not available');
         }
 
         const { user } = userContext;

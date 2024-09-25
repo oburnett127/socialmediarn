@@ -3,6 +3,8 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import PostsList from '../components/PostsList';
 import NewPost from '../components/NewPost';
 import { UserContext } from '../components/UserContext';
+import { View, Text } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type DrawerParamList = {
   OtherUser: { id: string};
@@ -10,25 +12,30 @@ type DrawerParamList = {
 
 function OtherUserPage() {
   const route = useRoute<RouteProp<DrawerParamList, 'OtherUser'>>();
-  const { id: searchedUserId } = route.params;
+  const { id: searchedUserId } = route.params || {};
   const userContext = useContext(UserContext);
   const [isFriend, setIsFriend] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   //const [isBlocked, setIsBlocked] = useState<boolean>(false);
   const { user } = userContext || {};
-  const jwtToken = localStorage.getItem('jwtToken');
+  const jwtToken = AsyncStorage.getItem('jwtToken');
+
+  const isEmptyObject = (obj) => obj && Object.keys(obj).length === 0 && obj.constructor === Object;
 
   //console.log('searched user id: ', searchedUserId);
 
   useEffect(() => {
-    if (!user?.id || !searchedUserId) return;
-    const getFriendStatus = async () => {
+      const getFriendStatus = async () => {
       try {
-        if (!user.id || !searchedUserId) return;
+        if (!user || isEmptyObject(user) || !user.id || !searchedUserId) {
+          setErrorMessage('No user context available. If not logged in please log in.');
+          return; 
+        }
+        setErrorMessage(null);
         const requestData = {
           loggedInUserId: user.id,
           otherUserId: Number(searchedUserId)
         };
-
         const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/friend/getfriendstatus`, {
           method: 'POST',
           headers: {
@@ -71,17 +78,20 @@ function OtherUserPage() {
     
     getFriendStatus();
     //getBlockedStatus();
-  }, [user?.id, searchedUserId, jwtToken]);
+  }, [user, user?.id, searchedUserId, jwtToken]);
 
   const handleRequestFriend = () => {
     const requestFriend = async () => {
       try {
-        if (!user?.id || !searchedUserId) return;
+        if(!user || isEmptyObject(user) || !user.id || !searchedUserId) {
+          setErrorMessage('No user context available. If not logged in please log in.');
+          return; 
+        }
+        setErrorMessage(null);
         const requestData = {
           fromUserId: user.id,
           toUserId: searchedUserId
         };
-
         const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/friend/request`, {
           method: 'POST',
             headers: {
@@ -101,12 +111,15 @@ function OtherUserPage() {
   const handleRemoveFriend = () => {
     const removeFriend = async () => {
       try {
-        if (!user?.id || !searchedUserId) return;
+        if(!user || isEmptyObject(user) || !user.id || !searchedUserId) {
+          setErrorMessage('No user context available. If not logged in please log in.');
+          return; 
+        }
+        setErrorMessage(null);
         const requestData = {
           userId1: user.id,
           userId2: searchedUserId
         };
-
         const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/friend/delete`, {
           method: 'POST',
             headers: {
@@ -173,16 +186,30 @@ function OtherUserPage() {
   //   unblockUser();
   // }
 
-  if (!userContext || !userContext.user) return null;
+  if (!userContext || !userContext.user) {
+    return (
+      <View>
+          <Text>No user context available. If not logged in please log in.</Text>
+      </View>
+    );
+  }
 
   return (
     <>
-      {searchedUserId && <NewPost profUID={searchedUserId} />}
-      {searchedUserId && <PostsList id={searchedUserId} />}
-      {!isFriend && (<button onClick={() => handleRequestFriend()}>Send Request</button>)}
-      {isFriend && (<button onClick={() => handleRemoveFriend()}>Remove Friend</button>)}
-      {/* {!isBlocked && (<button onClick={() => handleBlockUser()}>Block User</button>)}
-      {isBlocked && (<button onClick={() => handleUnblockUser()}>Unblock User</button>)} */}
+      <View>
+        {errorMessage ? (
+          <Text>{errorMessage}</Text>
+        ) : (
+          <>
+            {searchedUserId && <NewPost profUID={searchedUserId} />}
+            {searchedUserId && <PostsList id={searchedUserId} />}
+            {!isFriend && (<button onClick={() => handleRequestFriend()}>Send Request</button>)}
+            {isFriend && (<button onClick={() => handleRemoveFriend()}>Remove Friend</button>)}
+            {/* {!isBlocked && (<button onClick={() => handleBlockUser()}>Block User</button>)}
+            {isBlocked && (<button onClick={() => handleUnblockUser()}>Unblock User</button>)} */}      
+          </>
+        )}
+      </View>
     </>
   )
 }

@@ -16,7 +16,11 @@ function NewPost({ profUID }: { profUID: string }) {
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     if (!userContext || !userContext.user) {
-      return;
+      return (
+        <View>
+            <Text>No user context available. If not logged in please log in.</Text>
+        </View>
+    );
     }
 
     const formData = { authorUserId: userContext.user.id, profileUserId: profUID, text: data.postText };
@@ -36,7 +40,7 @@ function NewPost({ profUID }: { profUID: string }) {
   };
 
   if (!userContext || !userContext.user) {
-    return (<p>The form could not be generated.</p>);
+    return (<p>The form could not be generated. If not logged in please log in.</p>);
   }
 
   return (
