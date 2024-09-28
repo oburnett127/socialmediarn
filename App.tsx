@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -51,6 +51,8 @@ function AppDrawer() {
 }
 
 function App() {
+    const [user, setUser] = useState(null);
+    
     return (
         <UserProvider>
             <NavigationContainer>

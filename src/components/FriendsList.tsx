@@ -6,6 +6,7 @@ import { RootDrawerParamList } from '../../App';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { isEmptyObject } from '../utils/helperfunctions';
 
 interface Friend {
   id: number;
@@ -19,21 +20,27 @@ const FriendsList: React.FC = () => {
   const userContext = useContext(UserContext);
   const [friendsData, setFriendsData] = useState<Friend[] | null>(null);
   const navigation = useNavigation<FriendsListNavigationProp>();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  console.debug("456");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const jwtToken = await AsyncStorage.getItem('jwtToken');
-        if (!userContext || !userContext.user) {
-          return (
-            <View>
-                <Text>No user context available. If not logged in please log in.</Text>
-            </View>
-        );
-          //throw new Error('User context not available');
-        }
-
+        
+        console.debug("test 567");
+        console.debug(userContext);
+        
         const { user } = userContext;
+
+        console.log("test 185");
+        console.debug(user);
+
+        if (isEmptyObject(user)) {
+          setErrorMessage('No user context available. If not logged in please log in 123. ');
+          return; 
+        }
         const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/friend/getbyuserid/${user.id}`, {
           headers: {
             Authorization: `Bearer ${jwtToken}`,
@@ -53,11 +60,16 @@ const FriendsList: React.FC = () => {
   const removeFriend = async (friendId: number) => {
     try {
       const jwtToken = await AsyncStorage.getItem('jwtToken');
-      if (!userContext || !userContext.user) {
-        throw new Error('User context not available');
-      }
-
       const { user } = userContext;
+
+
+      console.log(user);
+
+
+      if (isEmptyObject(user)) {
+        setErrorMessage('No user context available. If not logged in please log in.');
+        return; 
+      }
       await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/friend/delete`,
         { userId1: user.id, userId2: friendId },
@@ -80,7 +92,9 @@ const FriendsList: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      {friendsData ? (
+      {errorMessage ? (
+        <Text>{errorMessage}</Text>
+      ) : friendsData ? (
         <>
           <Text style={styles.title}>Your Friends</Text>
           <FlatList
@@ -121,3 +135,15 @@ const styles = StyleSheet.create({
 });
 
 export default FriendsList;
+
+
+
+// const FriendsList: React.FC = () => {
+//   return (
+//     <View>
+//       <Text>Test: FriendsList component is rendering</Text>
+//     </View>
+//   );
+// };
+
+// export default FriendsList;

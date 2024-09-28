@@ -5,6 +5,7 @@ import NewPost from '../components/NewPost';
 import { UserContext } from '../components/UserContext';
 import { View, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { isEmptyObject } from '../utils/helperfunctions';
 
 type DrawerParamList = {
   OtherUser: { id: string};
@@ -19,8 +20,6 @@ function OtherUserPage() {
   //const [isBlocked, setIsBlocked] = useState<boolean>(false);
   const { user } = userContext || {};
   const jwtToken = AsyncStorage.getItem('jwtToken');
-
-  const isEmptyObject = (obj) => obj && Object.keys(obj).length === 0 && obj.constructor === Object;
 
   //console.log('searched user id: ', searchedUserId);
 
@@ -185,14 +184,6 @@ function OtherUserPage() {
       
   //   unblockUser();
   // }
-
-  if (!userContext || !userContext.user) {
-    return (
-      <View>
-          <Text>No user context available. If not logged in please log in.</Text>
-      </View>
-    );
-  }
 
   return (
     <>

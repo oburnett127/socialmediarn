@@ -13,7 +13,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.oburnett127.socialmediarn"
     },
     "android": {
       "adaptiveIcon": {
@@ -25,6 +26,9 @@
           "cleartextTrafficPermitted": true
         }
       },
+      "permissions": [
+        "INTERNET"
+      ],
       "package": "com.oburnett127.socialmediarn"
     },
     "web": {
@@ -51,6 +55,7 @@
       "eas": {
         "projectId": "45ca9ca9-1232-4bbc-92ca-c63377888a11"
       }
-    }
+    },
+    "jsEngine": "jsc"
   }
 }
